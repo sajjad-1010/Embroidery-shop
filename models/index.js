@@ -1,5 +1,4 @@
-// models/index.js
-const sequelize = require('../config/database');
+const sequelize = require('../config/dbConfig');
 const Product = require('./product');
 
 const db = {
