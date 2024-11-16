@@ -1,18 +1,20 @@
+// app.js
 const express = require('express');
-const db = require('./models');
-const productRoutes = require('./routers/productRoutes');
+const sequelize = require('./config/database');
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
-
-// Routes
-app.use('/api', productRoutes);
-
 const PORT = process.env.PORT || 3000;
 
-db.sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+app.get('/health', async (req, res) => {
+  try {
+    await sequelize.authenticate(); 
+    res.status(200).json({ status: 'UP' });
+  } catch (error) {
+    res.status(500).json({ status: 'DOWN', error: error.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
