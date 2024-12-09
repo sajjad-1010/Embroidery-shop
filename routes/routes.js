@@ -14,7 +14,8 @@ router.delete(`${API_PREFIX}/clothes/:id`, ClothesController.deleteClothes); // 
 
 // Comments Routes
 router.post(`${API_PREFIX}/comments`, CommentsController.createComment); // Create a new comment or reply
-router.get(`${API_PREFIX}/comments/:clothesId`, CommentsController.getAllCommentsByClothesId); // Get all comments for a specific clothes item
+router.get(`${API_PREFIX}/comments/cloth/:clothesId`, CommentsController.getAllCommentsByClothesId); // Get all comments for a specific clothes item
 router.get(`${API_PREFIX}/comments/:id`, CommentsController.getCommentById); // Get a specific comment by ID
-
+router.delete(`${API_PREFIX}/comments/:id`, CommentsController.deleteComment); // Delete comment by ID
+router.put(`${API_PREFIX}/comments/:id`, CommentsController.updateCommentText);
 module.exports = router;
