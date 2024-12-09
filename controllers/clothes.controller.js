@@ -1,4 +1,4 @@
-const ClothesService = require('../services/clothes.service');
+const ClothesService = require('../services/clothes.service')
 
 class ClothesController {
   async createClothes(req, res) {
@@ -7,6 +7,7 @@ class ClothesController {
       res.status(201).json(newClothes);
     } catch (err) {
       res.status(400).json({ error: err.message });
+      // console.log({ error: err });
     }
   }
 

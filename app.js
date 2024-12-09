@@ -1,9 +1,8 @@
 const express = require("express");
 const sequelize = require("./config/dbConfig");
 require("dotenv").config();
+const routes = require("./routes/routes");
 // require('./models/syncDatabase');
-const clothesRoutes = require("./routes/clothes.routes");
-const commentsRoutes = require("./routes/comments.routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,7 +29,10 @@ const PORT = process.env.PORT || 3000;
   }
 })();
 
-app.use(express.json()); // Parse JSON request bodies
+// sequelize.sync({ alter: true }) // Automatically adjusts the schema
+//   .then(() => console.log('Database synchronized'))
+//   .catch((err) => console.error('Error synchronizing database:', err));
 
-app.use("/api/clothes", clothesRoutes);
-app.use("/api/comments", commentsRoutes);
+
+app.use(express.json()); // Parse JSON request bodies
+app.use(routes);

@@ -1,17 +1,7 @@
-const CommentsRepository = require('../repository/comments.repository');
+const CommentsRepository = require('../repository/commentsRepository');
 
 class CommentsService {
   async createComment(data) {
-    const { isFirstComment, parentId, clothesId } = data;
-
-    if (!clothesId) {
-      throw new Error('Every comment must belong to a clothing item.');
-    }
-
-    if (!isFirstComment && !parentId) {
-      throw new Error('Replies must have a parentId.');
-    }
-
     return await CommentsRepository.createComment(data);
   }
 

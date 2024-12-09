@@ -15,11 +15,11 @@ const Clothes = sequelize.define(
       allowNull: false
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     description: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true
     },
     specifications: {

@@ -1,4 +1,4 @@
-const ClothesRepository = require('../repository/clothes.repository');
+const ClothesRepository = require('../repository/clothesRepository');
 
 class ClothesService {
   async createClothes(data) {
