@@ -17,14 +17,15 @@ class CommentsController {
     }
   }
 
-  static async getAllComments(req, res) {
+  static async getAllCommentsByClothesId(req, res) {
     try {
-      const comments = await Comment.findAll();
-      res.status(200).json(comments);
+        const { clothesId } = req.params;
+        const comments = await Comment.findAll({ where: { clothesId } });
+        res.status(200).json(comments);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to fetch comments.', error: error.message });
+        res.status(500).json({ message: 'Failed to fetch comments.', error: error.message });
     }
-  }
+}
 
 
   static async getCommentById(req, res) {
@@ -84,4 +85,4 @@ class CommentsController {
   }
 }
 
-module.exports = new CommentsController();
+module.exports = CommentsController;
