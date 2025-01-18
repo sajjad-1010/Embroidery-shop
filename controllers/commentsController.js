@@ -1,4 +1,4 @@
-const Comments = require('../models/comments.model');
+const Comments = require('../models/commentsModel');
 
 class CommentsController {
 
@@ -19,19 +19,38 @@ class CommentsController {
 
   static async getAllCommentsByClothesId(req, res) {
     try {
-        const { clothesId } = req.params;
-        const comments = await Comment.findAll({ where: { clothesId } });
-        res.status(200).json(comments);
+      const { clothesId } = req.params;
+      const comments = await Comment.findAll({
+        where: { clothesId },
+        include: [
+          {
+            model: Comments,
+            as: 'replies', // Include replies for each comment
+          },
+          {
+            model: User,
+            as: 'author', // Include author details
+            attributes: ['id', 'name', 'email'], // Select fields to include
+          },
+        ],
+      });
+      res.status(200).json(comments);
     } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch comments.', error: error.message });
+      res.status(500).json({ message: 'Failed to fetch comments.', error: error.message });
     }
-}
+  }
 
 
   static async getCommentById(req, res) {
     try {
       const { id } = req.params;
-      const comment = await Comment.findByPk(id);
+      const comment = await Comment.findByPk(id , {
+        include: [
+          { model: Comments, as: 'replies' }, // Include replies
+          { model: User, as: 'author', attributes: ['id', 'name', 'email'] }, // Include author details
+          { model: Clothes, as: 'clothes' }, // Include associated clothes
+        ],
+      });
 
       if (!comment) {
         return res.status(404).json({ message: 'Comment not found.' });

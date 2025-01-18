@@ -2,20 +2,22 @@ const express = require("express");
 const sequelize = require("./config/dbConfig");
 require("dotenv").config();
 const routes = require("./routes/routes");
+// const authRoutes = require('./routes/authRoutes');
 // require('./models/syncDatabase');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // health check for database
-// app.get('/health', async (req, res) => {
-//   try {
-//     await sequelize.authenticate();
-//     res.status(200).json({ status: 'UP', message: 'Database connected' });
-//   } catch (error) {
-//     res.status(500).json({ status: 'DOWN', error: error.message });
-//   }
-// });
+app.get('/health', async (req, res) => {
+  try {
+    await sequelize.authenticate();
+    res.status(200).json({ status: 'UP', message: 'Database connected' });
+  } catch (error) {
+    res.status(500).json({ status: 'DOWN', error: error.message });
+  }
+});
 
 (async () => {
   try {
@@ -29,10 +31,11 @@ const PORT = process.env.PORT || 3000;
   }
 })();
 
-// sequelize.sync({ alter: true }) // Automatically adjusts the schema
-//   .then(() => console.log('Database synchronized'))
-//   .catch((err) => console.error('Error synchronizing database:', err));
+sequelize.sync({ alter: true }) // Automatically adjusts the schema
+  .then(() => console.log('Database synchronized'))
+  .catch((err) => console.error('Error synchronizing database:', err));
 
 
+// app.use('/auth', authRoutes);
 app.use(express.json()); // Parse JSON request bodies
 app.use(routes);

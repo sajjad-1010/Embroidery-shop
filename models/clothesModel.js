@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
-const Comments = require("./comments.model"); // Import Comments model
+const Comments = require("./commentsModel"); // Import Comments model
 
 const Clothes = sequelize.define(
   "Clothes",

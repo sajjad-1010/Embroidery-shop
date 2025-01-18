@@ -1,4 +1,4 @@
-const Clothes = require('../models/clothes.model')
+const Clothes = require('../models/clothesModel')
 
 class ClothesController {
   static async createClothes(req, res) {

@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
+const User = require('./usersModel'); // Import User model
 
 const Comments = sequelize.define('Comments', {
   id: {
@@ -29,6 +30,10 @@ const Comments = sequelize.define('Comments', {
     type: DataTypes.INTEGER,
     allowNull: false, // Every comment belongs to a clothing item
   },
+  userId: { // New field for the user who wrote the comment
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 }, {
   tableName: 'comments',
   timestamps: true,
@@ -42,6 +47,12 @@ Comments.hasMany(Comments, {
 Comments.belongsTo(Comments, {
   foreignKey: 'parentId',
   as: 'parent',
+});
+
+// Association with User
+Comments.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'author', // Alias for the user who wrote the comment
 });
 
 module.exports = Comments;
