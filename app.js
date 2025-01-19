@@ -3,7 +3,7 @@ const sequelize = require("./config/dbConfig");
 require("dotenv").config();
 const routes = require("./routes/routes");
 // const authRoutes = require('./routes/authRoutes');
-// require('./models/syncDatabase');
+require('./models/syncDatabase');
 
 
 const app = express();
@@ -21,19 +21,17 @@ app.get('/health', async (req, res) => {
 
 (async () => {
   try {
+    const { sequelize } = require('./models');
     await sequelize.authenticate();
-    console.log("Database connected successfully");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.error("Unable to connect to the database:", err);
+    console.log('Database connected successfully.');
+
+    await sequelize.sync({ force: true }); // Recreate tables for testing
+    console.log('Database synchronized.');
+  } catch (error) {
+    console.error('Error:', error);
   }
 })();
 
-sequelize.sync({ alter: true }) // Automatically adjusts the schema
-  .then(() => console.log('Database synchronized'))
-  .catch((err) => console.error('Error synchronizing database:', err));
 
 
 // app.use('/auth', authRoutes);

@@ -1,4 +1,4 @@
-const UserModel = require('../models/usersModel');
+const User = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -9,7 +9,7 @@ class UserController {
             const { name, email, password } = req.body;
 
             // Check if email already exists
-            const existingUser = await UserModel.findOne({ where: { email } });
+            const existingUser = await User.findOne({ where: { email } });
             if (existingUser) {
                 return res.status(400).json({ error: 'Email is already registered' });
             }
@@ -18,7 +18,7 @@ class UserController {
             const hashedPassword = await bcrypt.hash(password, 10);
 
             // Create the user
-            const newUser = await UserModel.create({
+            const newUser = await User.create({
                 name,
                 email,
                 password: hashedPassword,
@@ -36,7 +36,7 @@ class UserController {
             const { email, password } = req.body;
 
             // Find the user by email
-            const user = await UserModel.findOne({ where: { email } });
+            const user = await User.findOne({ where: { email } });
 
             // Validate user and password
             if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -60,7 +60,7 @@ class UserController {
             const userId = req.params.id;
 
             // Fetch the user profile
-            const user = await UserModel.findByPk(userId);
+            const user = await User.findByPk(userId);
 
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
@@ -79,14 +79,14 @@ class UserController {
             const updateData = req.body;
 
             // Update the user's information
-            const [updatedRows] = await UserModel.update(updateData, { where: { id: userId } });
+            const [updatedRows] = await User.update(updateData, { where: { id: userId } });
 
             if (updatedRows === 0) {
                 return res.status(404).json({ error: 'User not found' });
             }
 
             // Fetch the updated user
-            const updatedUser = await UserModel.findByPk(userId);
+            const updatedUser = await User.findByPk(userId);
             res.status(200).json({ message: 'User updated successfully', user: updatedUser });
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -99,14 +99,14 @@ class UserController {
             const userId = req.params.id;
 
             // Check if the user exists
-            const user = await UserModel.findByPk(userId);
+            const user = await User.findByPk(userId);
 
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
 
             // Delete the user
-            await UserModel.destroy({ where: { id: userId } });
+            await User.destroy({ where: { id: userId } });
             res.status(200).json({ message: 'User deleted successfully' });
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -116,7 +116,7 @@ class UserController {
     // Find all user profiles
     async findAllProfile(req, res) {
         try {
-            const users = await UserModel.findAll();
+            const users = await User.findAll();
             res.status(200).json(users);
         } catch (err) {
             res.status(500).json({ error: err.message });

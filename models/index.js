@@ -1,20 +1,21 @@
-const Clothes = require('./clothesModel');
-const Comment = require('./commentsModel');
+const sequelize = require('../config/dbConfig');
 const User = require('./usersModel');
+const Comments = require('./commentsModel');
+const Clothes = require('./clothesModel');
 
-// Relationships
-Clothes.hasMany(Comment, { foreignKey: 'clothesId', onDelete: 'CASCADE' });
-Comment.belongsTo(Clothes, { foreignKey: 'clothesId' });
+// Associations
+Clothes.hasMany(Comments, { foreignKey: 'clothesId', onDelete: 'CASCADE', as: 'comments' });
+Comments.belongsTo(Clothes, { foreignKey: 'clothesId', as: 'clothes' });
 
-Comment.hasMany(Comment, { foreignKey: 'parentCommentId', as: 'replies' });
-Comment.belongsTo(Comment, { foreignKey: 'parentCommentId', as: 'parentComment' });
+Comments.hasMany(Comments, { foreignKey: 'parentId', as: 'replies' });
+Comments.belongsTo(Comments, { foreignKey: 'parentId', as: 'parent' });
 
-// Add the relationship between Comment and User
-User.hasMany(Comment, { foreignKey: 'userId', onDelete: 'CASCADE' }); // A user can write many comments
-Comment.belongsTo(User, { foreignKey: 'userId', as: 'author' }); // Each comment is written by one user
+User.hasMany(Comments, { foreignKey: 'userId', as: 'comments' });
+Comments.belongsTo(User, { foreignKey: 'userId', as: 'author' });
 
 module.exports = {
-  Clothes,
-  Comment,
+  sequelize,
   User,
+  Comments,
+  Clothes,
 };

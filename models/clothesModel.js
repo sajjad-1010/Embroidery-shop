@@ -1,10 +1,10 @@
-const { DataTypes } = require("sequelize");
+const { Model ,DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
 const Comments = require("./commentsModel"); // Import Comments model
 
-const Clothes = sequelize.define(
-  "Clothes",
-  {
+class Clothes extends Model {}
+
+Clothes.init({
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -52,6 +52,7 @@ const Clothes = sequelize.define(
     }
   },
   {
+    sequelize ,
     tableName: "clothes",
     timestamps: true
   }
